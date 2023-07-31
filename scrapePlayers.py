@@ -77,7 +77,7 @@ if __name__ == "__main__":
         data_for_radar.columns = ['Percentile']
 
         # Limit the number of stats to 6-8 for a well-balanced radar chart
-        num_stats_to_display = min(8, len(data_for_radar))
+        num_stats_to_display = min(10, len(data_for_radar))
         data_for_radar = data_for_radar.head(num_stats_to_display)
 
         # Generate the radar chart
@@ -88,12 +88,16 @@ if __name__ == "__main__":
             polar=dict(
                 radialaxis=dict(
                     visible=True,
-                    range=[0, 100],
-                    showticklabels=True,
+                    range=[0, 104],
+                    showticklabels=True, 
+                    tickfont=dict(color='black',size = 10),
                 ),
             ),
             showlegend=False,
             title="Kylian Mbappe's Standard Stats Percentiles",
+            width = 800,
+            height =600,
+            
         )
 
         # Add labels to the data points on the radar chart
@@ -102,9 +106,12 @@ if __name__ == "__main__":
                 go.Scatterpolar(
                     r=[data_for_radar.iloc[i]['Percentile']],
                     theta=[data_for_radar.index[i]],
-                    mode='markers+text',
+                    mode='lines+markers',
+                    fill='toself',  # Fill the area inside the chart up to the marker points
+                    fillcolor=highlight_strengths_weaknesses(data_for_radar.iloc[i]['Percentile']),  # Use the color based on the percentile
                     text=[f"{data_for_radar.iloc[i]['Percentile']}%"],
-                    textposition="top center",
+                    textposition="middle center",
+                    textfont=dict(size=12,color='darkblue'),
                     marker=dict(size=10, color=highlight_strengths_weaknesses(data_for_radar.iloc[i]['Percentile'])),
                 )
             )
